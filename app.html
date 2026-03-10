@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapSnap</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader">
+            <h1>SnapSnap</h1>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Server List (far left icons) -->
+        <div class="server-list">
+            <div class="server-icon home-icon active" id="home-btn" title="Home">
+                <svg width="28" height="20" viewBox="0 0 28 20">
+                    <path fill="currentColor" d="M23.02 1.68C21.31.88 19.51.32 17.66 0c-.25.46-.48.93-.69 1.42-1.97-.3-3.97-.3-5.97 0-.2-.49-.43-.96-.69-1.42C8.48.32 6.68.88 4.97 1.68 1.57 6.78.65 11.75 1.11 16.65c1.99 1.5 4.07 2.4 6.12 2.99.54-.73 1.02-1.51 1.43-2.33-.78-.3-1.54-.66-2.26-1.09.2-.14.39-.29.57-.44 4.29 2.01 8.99 2.01 13.24 0 .19.15.38.3.57.44-.72.43-1.47.79-2.26 1.09.41.82.89 1.6 1.43 2.33 2.05-.59 4.13-1.49 6.12-2.99.54-5.67-.86-10.59-3.06-14.97z"/>
+                </svg>
+            </div>
+            <div class="server-separator"></div>
+            <div id="server-icons"></div>
+            <div class="server-icon add-server-icon" id="add-server-btn" title="Add a Server">+</div>
+        </div>
+
+        <!-- Channel Sidebar -->
+        <div class="channel-sidebar">
+            <!-- Home View Header -->
+            <div id="home-header" class="sidebar-header">
+                <input type="text" placeholder="Find or start a conversation" id="search-input" readonly>
+            </div>
+            <!-- Server View Header -->
+            <div id="server-header" class="sidebar-header" style="display:none;">
+                <h3 id="server-name-header">Server Name</h3>
+            </div>
+
+            <!-- Home Navigation -->
+            <div id="home-nav">
+                <div class="nav-item active" data-view="friends">
+                    <span class="nav-icon">👥</span> Friends
+                </div>
+                <h4 class="section-title">DIRECT MESSAGES</h4>
+                <div id="dm-list"></div>
+            </div>
+
+            <!-- Server Channels -->
+            <div id="server-channels" style="display:none;">
+                <div class="channel-category">
+                    <h4 class="section-title">TEXT CHANNELS <span class="add-channel-btn" id="add-channel-btn" title="Create Channel">+</span></h4>
+                    <div id="channel-list"></div>
+                </div>
+                <div class="channel-category">
+                    <h4 class="section-title">MEMBERS</h4>
+                    <div id="invite-info">
+                        <p class="invite-label">Server ID (share to invite):</p>
+                        <code id="server-id-display"></code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Panel -->
+            <div class="user-panel">
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar"></div>
+                    <div class="user-details">
+                        <span class="username" id="user-display-name"></span>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+                <button class="icon-btn" id="logout-btn" title="Logout">⏻</button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Chat View -->
+            <div id="chat-view" style="display:none;">
+                <div class="chat-header">
+                    <span class="chat-header-icon">#</span>
+                    <span id="chat-header-name">channel-name</span>
+                </div>
+                <div class="messages-container" id="messages-container">
+                    <div id="messages"></div>
+                </div>
+                <div class="message-input-container">
+                    <form id="message-form">
+                        <input type="text" id="message-input" placeholder="Message #channel" autocomplete="off">
+                    </form>
+                </div>
+            </div>
+
+            <!-- Friends View -->
+            <div id="friends-view">
+                <div class="chat-header">
+                    <span class="chat-header-icon">👥</span>
+                    <span>Friends</span>
+                    <div class="friends-tabs">
+                        <button class="tab-btn active" data-tab="all">All</button>
+                        <button class="tab-btn" data-tab="pending">Pending</button>
+                        <button class="tab-btn tab-add" data-tab="add">Add Friend</button>
+                    </div>
+                </div>
+                <div class="friends-content">
+                    <div id="friends-all" class="friends-tab-content active">
+                        <div id="friends-list"></div>
+                        <div class="empty-state" id="no-friends">
+                            <p>No friends yet. Add some!</p>
+                        </div>
+                    </div>
+                    <div id="friends-pending" class="friends-tab-content">
+                        <div id="pending-list"></div>
+                        <div class="empty-state" id="no-pending">
+                            <p>No pending requests.</p>
+                        </div>
+                    </div>
+                    <div id="friends-add" class="friends-tab-content">
+                        <div class="add-friend-form">
+                            <h3>ADD FRIEND</h3>
+                            <p>You can add friends with their username.</p>
+                            <form id="add-friend-form">
+                                <input type="text" id="friend-username-input" placeholder="Enter a username">
+                                <button type="submit" class="btn-primary">Send Friend Request</button>
+                            </form>
+                            <div id="friend-request-status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome / Empty State -->
+            <div id="welcome-view" style="display:none;">
+                <div class="welcome-content">
+                    <h2>Welcome to SnapSnap!</h2>
+                    <p>Select a server or start a conversation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/friends.js"></script>
+    <script src="js/servers.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
