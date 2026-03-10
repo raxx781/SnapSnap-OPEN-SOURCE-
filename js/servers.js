@@ -36,6 +36,16 @@ const Servers = {
     const container = document.getElementById('server-icons');
     container.innerHTML = '';
 
+    // Make sure Home button is active if no server selected
+    const homeBtn = document.getElementById('home-btn');
+    if (!this.currentServer) homeBtn.classList.add('active');
+    else homeBtn.classList.remove('active');
+
+    // Fallback dummy server if none exist
+    if (this.servers.length === 0) {
+      this.servers = [{ id: 'dummy', name: 'Welcome', iconColor: '#5865f2' }];
+    }
+
     this.servers.forEach(server => {
       const icon = document.createElement('div');
       icon.className = `server-icon${this.currentServer?.id === server.id ? ' active' : ''}`;
