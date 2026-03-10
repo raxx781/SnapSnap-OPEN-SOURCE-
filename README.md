@@ -1,4 +1,4 @@
-# SnapSnap
+# DisClone
 
 A Discord-like chat app with servers, channels, friends, and DMs. Built with vanilla HTML/CSS/JS and Firebase.
 
